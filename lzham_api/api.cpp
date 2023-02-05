@@ -78,3 +78,37 @@ EXPORT int decompress(unsigned char *source, size_t source_size, unsigned char* 
     inflateEnd(&stream);
     return 0;
 }
+
+EXPORT int compressing(unsigned char* source, size_t source_size, unsigned char* dest, size_t decompressed_size, int level) {
+    z_stream stream;
+
+    stream.next_in = source;
+    stream.avail_in = source_size;
+    stream.next_out = dest;
+    stream.avail_out = decompressed_size;
+
+    if (deflateInit(&stream, level) != Z_OK) {
+        std::cerr << "Failed to init deflate" << std::endl;
+        return 1;
+    }
+    int status;
+    while (stream.avail_in) {
+
+        status = deflate(&stream, Z_NO_FLUSH);
+        if (status == Z_STREAM_END) {
+            break;
+        }
+
+        if (status != Z_OK) {
+            std::cerr << "Error compressing " << status << std::endl;
+            if (status == LZHAM_Z_DATA_ERROR) {
+                std::cerr << "Invalid data" << std::endl;
+            }
+            deflateEnd(&stream);
+            return 1;
+        }
+
+    }
+    deflateEnd(&stream);
+    return 0;
+}
