@@ -45,7 +45,7 @@
 
 #define uint8 unsigned char
 
-EXPORT int decompress(BYTE* source, size_t source_size, BYTE* dest, size_t decompressed_size) {
+EXPORT int decompress(unsigned char *source, size_t source_size, unsigned char* dest, size_t decompressed_size) {
     z_stream stream;
 
     stream.next_in = source;
