@@ -1,7 +1,7 @@
 /*
  * MIT License
 
- * Copyright (c) 2023 Pawe≥ Lidwin
+ * Copyright (c) 2023 Pawe≈Ç Lidwin
 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -35,11 +35,14 @@
 #include <iostream>
 #include <cstring>
 
-#define EXPORT extern "C" _declspec(dllexport)
-
 #define LZHAM_DEFINE_ZLIB_API
-
+#if defined(_MSVC_VER)
+#define EXPORT extern "C" _declspec(dllexport)
 #include "../include/lzham_dynamic_lib.h"
+#else
+#define EXPORT extern "C" __attribute__((visibility("default")))
+#include "../include/lzham_static_lib.h"
+#endif
 #include <string>
 #include <fstream>
 
